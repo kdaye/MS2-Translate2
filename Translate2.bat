@@ -45,7 +45,7 @@ if %Proxifier%==0 (
     )
 
 if not exist bak (
-  echo 创建备份：%cd%\bak
+  echo 创建备份：!cd!\bak
   mkdir bak >nul;
   mkdir bak\Resource >nul;
   copy "!rootpath!\Data\Xml.m2h" "bak\" >nul;
@@ -77,8 +77,8 @@ if exist !rootpath!/mscn (
     )
 if exist Data (
       for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
-      for /f %%i in ('dir /s /b %cd%\Data\Xml.m2h') do ( Set hhxml=%%~ti)
-      for /f %%i in ('dir /s /b %cd%\bak\Xml.m2h') do ( Set bkxml=%%~ti)
+      for /f %%i in ('dir /s /b !cd!\Data\Xml.m2h') do ( Set hhxml=%%~ti)
+      for /f %%i in ('dir /s /b !cd!\bak\Xml.m2h') do ( Set bkxml=%%~ti)
       if "!xml!" equ "!hhxml!" (
       echo *检测到游戏已经汉化,打开游戏会造成更新.
       copy "bak\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul;
@@ -127,10 +127,10 @@ PAUSE >nul
 cls
 if exist Data (
   echo 正在汉化中
-  copy "%cd%\Data\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul
-  copy "%cd%\Data\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul
-  copy "%cd%\Data\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul
-  copy "%cd%\Data\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul
+  copy "!cd!\Data\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul
+  copy "!cd!\Data\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul
+  copy "!cd!\Data\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul
+  copy "!cd!\Data\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul
   echo.&echo.
   echo 可以开始进入游戏了！
   ) else (
