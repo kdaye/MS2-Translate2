@@ -112,9 +112,7 @@ echo             q.退出并还原 & echo.&echo.&echo.&echo.&echo.&echo.
 echo   汉化使用方法
 echo.&echo.
 echo   按【0.汉化】健并回车后，开启游戏！
-echo.&echo.
 echo   中途重启游戏，请先按【1.手动还原】再按【0.汉化】！
-echo.&echo.
 echo   退出游戏后务必按【q.退出并还原】，否则会造成下次游戏登陆错误！
 echo.&echo.
 set "select="
