@@ -5,41 +5,45 @@ if exist config.bat (
   echo 载入配置
   call config.bat
   ) else (
-  echo 初始化配置
-  type nul>config.bat
-  )
+    echo 初始化配置
+    echo 检测是否有Proxifier
+    if not defined Proxifier (
+      Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Proxifier.Document\DefaultIcon" >nul
+      if %errorlevel% == 1 (
+        echo Set Proxifier=1 >>config.bat
+         ) else (
+           echo Set Proxifier=0 >>config.bat
+           For /f "tokens=3,4,5 delims=, " %%i in (
+               'Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Proxifier.Document\DefaultIcon"'
+               ) do (
+               echo Set ProxifierPath=%%i %%j %%k>>config.bat
+                    )
+               )
+      )
+      echo 查找冒险岛2的路径
+      if not defined rootpath (
+            For /f "tokens=3 delims= " %%i in (
+              'Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Nexon\MapleStory2" /v "RootPath"  '
+              ) do (
+              echo Set rootpath=%%i>>config.bat
+              )
+            )
+    call config.bat
+    )
 
-if not defined Proxifier (
-  Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Proxifier.Document\DefaultIcon" >nul
-  if %errorlevel% == 1 (
-    echo Set Proxifier=1 >>config.bat
-    Set Proxifier=1
-     ) else (
-   echo Set Proxifier=0 >>config.bat
-   Set Proxifier=0
-   )
-  )
 if %Proxifier%==0 (
     if defined ProxifierPath (
-        tasklist|find "Proxifier.exe" >nul && echo Proxifier已经运行 || start "" "!ProxifierPath!" && echo 启动Proxifier
-        ) else (
-              For /f "tokens=3,4,5 delims=, " %%i in (
-                  'Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Proxifier.Document\DefaultIcon"'
-                  ) do (
-                  echo Set ProxifierPath=%%i %%j %%k>>config.bat
-                  )
-              call config.bat
-              tasklist|find "Proxifier.exe" >nul && echo Proxifier已经运行 || start "" "!ProxifierPath!" && echo 启动Proxifier
-              )
+        tasklist|find "Proxifier.exe" >nul
+        if !errorlevel! ==0 (
+                              echo Proxifier已经运行
+                              )
+        if !errorlevel! ==1 (
+                              start "" "!ProxifierPath!"
+                              echo 启动Proxifier
+                              )
+        ) else (echo 缺少Proxifier路径)
     )
-if not defined rootpath (
-      For /f "tokens=3 delims= " %%i in (
-        'Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Nexon\MapleStory2" /v "RootPath"  '
-        ) do (
-        echo Set rootpath=%%i>>config.bat
-        call config.bat
-        )
-      )
+ 
 for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
 for /f %%i in ('dir /s /b %cd%\Data\Xml.m2h') do ( Set hhxml=%%~ti)
 for /f %%i in ('dir /s /b %cd%\bak\Xml.m2h') do ( Set bkxml=%%~ti)
