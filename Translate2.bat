@@ -79,7 +79,7 @@ if exist Data (
       for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
       for /f %%i in ('dir /s /b %cd%\Data\Xml.m2h') do ( Set hhxml=%%~ti)
       for /f %%i in ('dir /s /b %cd%\bak\Xml.m2h') do ( Set bkxml=%%~ti)
-      if "%xml%" equ "%hhxml%" (
+      if "!xml!" equ "!hhxml!" (
       echo *检测到游戏已经汉化,打开游戏会造成更新.
       copy "bak\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul;
       copy "bak\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul;
@@ -87,7 +87,7 @@ if exist Data (
       copy "bak\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul;
       echo 游戏已自动还原为韩语。
               ) else (
-                if "%xml%" equ "%bkxml%" (echo 游戏备份已经是最新) else (
+                if "!xml!" equ "!bkxml!" (echo 游戏备份已经是最新) else (
                 echo *检测到游戏已更新，进入备份...
                 copy /y "!rootpath!\Data\Xml.m2h" "bak\" >nul;
                 copy /y "!rootpath!\Data\Xml.m2d" "bak\" >nul;
