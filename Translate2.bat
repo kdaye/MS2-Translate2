@@ -54,7 +54,7 @@ if not exist bak (
   copy "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
   )
 if exist !rootpath!/mscn (
-    if not exist Data(
+    if not exist Data (
     mkdir Data
     mkdir Data\Resource
     )
