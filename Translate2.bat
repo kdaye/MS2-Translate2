@@ -40,7 +40,7 @@ if not defined rootpath (
         call config.bat
         )
       )
-for /f %%i in ('dir /s /b %rootpath%\Data\Xml.m2h') do ( Set xml=%%~ti)
+for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
 for /f %%i in ('dir /s /b %cd%\Data\Xml.m2h') do ( Set hhxml=%%~ti)
 for /f %%i in ('dir /s /b %cd%\bak\Xml.m2h') do ( Set bkxml=%%~ti)
 
@@ -48,10 +48,10 @@ if not exist bak (
   echo 创建备份：%cd%\bak
   mkdir bak >nul;
   mkdir bak\Resource >nul;
-  copy "%rootpath%\Data\Xml.m2h" "bak\" >nul;
-  copy "%rootpath%\Data\Xml.m2d" "bak\" >nul;
-  copy "%rootpath%\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
-  copy "%rootpath%\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
+  copy "!rootpath!\Data\Xml.m2h" "bak\" >nul;
+  copy "!rootpath!\Data\Xml.m2d" "bak\" >nul;
+  copy "!rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
+  copy "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
   )
 if exist !rootpath!/mscn (
     if not exist Data(
@@ -78,18 +78,18 @@ if exist !rootpath!/mscn (
 if exist Data (
       if "%xml%" equ "%hhxml%" (
       echo *检测到游戏已经汉化,打开游戏会造成更新.
-      copy "bak\Xml.m2h" "%rootpath%\Data\Xml.m2h" >nul;
-      copy "bak\Xml.m2d" "%rootpath%\Data\Xml.m2d" >nul;
-      copy "bak\Resource\Gfx.m2d" "%rootpath%\Data\Resource\Gfx.m2d" >nul;
-      copy "bak\Resource\Gfx.m2h" "%rootpath%\Data\Resource\Gfx.m2h" >nul;
+      copy "bak\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul;
+      copy "bak\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul;
+      copy "bak\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul;
+      copy "bak\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul;
       echo 游戏已自动还原为韩语。
               ) else (
                 if "%xml%" equ "%bkxml%" (echo 游戏备份已经是最新) else (
                 echo *检测到游戏已更新，进入备份...
-                copy /y "%rootpath%\Data\Xml.m2h" "bak\" >nul;
-                copy /y "%rootpath%\Data\Xml.m2d" "bak\" >nul;
-                copy /y "%rootpath%\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
-                copy /y "%rootpath%\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
+                copy /y "!rootpath!\Data\Xml.m2h" "bak\" >nul;
+                copy /y "!rootpath!\Data\Xml.m2d" "bak\" >nul;
+                copy /y "!rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
+                copy /y "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
                 echo 更新备份已完成
                         )
                       )
@@ -125,10 +125,10 @@ PAUSE >nul
 cls
 if exist Data (
   echo 正在汉化中
-  copy "%cd%\Data\Xml.m2h" "%rootpath%\Data\Xml.m2h" >nul
-  copy "%cd%\Data\Xml.m2d" "%rootpath%\Data\Xml.m2d" >nul
-  copy "%cd%\Data\Resource\Gfx.m2d" "%rootpath%\Data\Resource\Gfx.m2d" >nul
-  copy "%cd%\Data\Resource\Gfx.m2h" "%rootpath%\Data\Resource\Gfx.m2h" >nul
+  copy "%cd%\Data\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul
+  copy "%cd%\Data\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul
+  copy "%cd%\Data\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul
+  copy "%cd%\Data\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul
   echo.&echo.
   echo 可以开始进入游戏了！
   ) else (
@@ -141,10 +141,10 @@ Goto main
 
 :hy1
 cls
-copy "bak\Xml.m2h" "%rootpath%\Data\Xml.m2h" >nul;
-copy "bak\Xml.m2d" "%rootpath%\Data\Xml.m2d" >nul;
-copy "bak\Resource\Gfx.m2d" "%rootpath%\Data\Resource\Gfx.m2d" >nul;
-copy "bak\Resource\Gfx.m2h" "%rootpath%\Data\Resource\Gfx.m2h" >nul;
+copy "bak\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul;
+copy "bak\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul;
+copy "bak\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul;
+copy "bak\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul;
 echo.&echo.
 echo 游戏已还原为韩语。
 PAUSE >nul
@@ -153,10 +153,10 @@ Goto main
 :dnb
 cls
 echo 更新备份
-copy /y "%rootpath%\Data\Xml.m2h" "bak\" >nul;
-copy /y "%rootpath%\Data\Xml.m2d" "bak\" >nul;
-copy /y "%rootpath%\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
-copy /y "%rootpath%\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
+copy /y "!rootpath!\Data\Xml.m2h" "bak\" >nul;
+copy /y "!rootpath!\Data\Xml.m2d" "bak\" >nul;
+copy /y "!rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
+copy /y "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
 echo 更新备份已完成
 
 
@@ -165,9 +165,9 @@ Goto main
 
 
 :exit
-copy "bak\Xml.m2h" "%rootpath%\Data\Xml.m2h" >nul;
-copy "bak\Xml.m2d" "%rootpath%\Data\Xml.m2d" >nul;
-copy "bak\Resource\Gfx.m2d" "%rootpath%\Data\Resource\Gfx.m2d" >nul;
-copy "bak\Resource\Gfx.m2h" "%rootpath%\Data\Resource\Gfx.m2h" >nul
+copy "bak\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul;
+copy "bak\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul;
+copy "bak\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul;
+copy "bak\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul
 exit
 goto :eof
