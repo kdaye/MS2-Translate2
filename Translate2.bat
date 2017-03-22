@@ -117,7 +117,6 @@ echo   退出游戏后务必按【q.退出并还原】，否则会造成下次�
 echo.&echo.
 set "select="
 set/p select= 输入数字，按回车继续 :
-echo 本汉化位置：%cd%
 if "%select%"=="0" (goto hh0)
 if "%select%"=="1" (goto hy1)
 if "%select%"=="2" (goto dnb)
