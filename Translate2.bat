@@ -43,10 +43,6 @@ if %Proxifier%==0 (
                               )
         ) else (echo 缺少Proxifier路径)
     )
- 
-for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
-for /f %%i in ('dir /s /b %cd%\Data\Xml.m2h') do ( Set hhxml=%%~ti)
-for /f %%i in ('dir /s /b %cd%\bak\Xml.m2h') do ( Set bkxml=%%~ti)
 
 if not exist bak (
   echo 创建备份：%cd%\bak
@@ -80,6 +76,9 @@ if exist !rootpath!/mscn (
         )
     )
 if exist Data (
+      for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
+      for /f %%i in ('dir /s /b %cd%\Data\Xml.m2h') do ( Set hhxml=%%~ti)
+      for /f %%i in ('dir /s /b %cd%\bak\Xml.m2h') do ( Set bkxml=%%~ti)
       if "%xml%" equ "%hhxml%" (
       echo *检测到游戏已经汉化,打开游戏会造成更新.
       copy "bak\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul;
