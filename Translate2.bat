@@ -131,8 +131,10 @@ if exist Data (
                       echo 正在汉化
                       copy "!cd!\Data\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul
                       copy "!cd!\Data\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul
+                      if exist Data\Resource (
                       copy "!cd!\Data\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul
                       copy "!cd!\Data\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul
+                      )
                       echo 汉化成功！
                       )
   if !errorlevel! ==1 (
