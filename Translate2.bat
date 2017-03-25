@@ -1,6 +1,6 @@
 @echo Off & setlocal enabledelayedexpansion
 :k@kdaye.com
-title 冒险岛2汉化工具 - J 20170321
+title 冒险岛2汉化工具 - J 20170325
 if exist config.bat (
   echo 载入配置
   call config.bat
@@ -31,6 +31,7 @@ if exist config.bat (
     call config.bat
     )
 
+
 if %Proxifier%==0 (
     if defined ProxifierPath (
         tasklist|find "Proxifier.exe" >nul
@@ -48,11 +49,12 @@ if not exist bak (
   echo 创建备份：!cd!\bak
   mkdir bak >nul;
   mkdir bak\Resource >nul;
-  copy "!rootpath!\Data\Xml.m2h" "bak\" >nul;
-  copy "!rootpath!\Data\Xml.m2d" "bak\" >nul;
-  copy "!rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
-  copy "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
+  copy !rootpath!\Data\Xml.m2h" "bak\" >nul;
+  copy !rootpath!\Data\Xml.m2d" "bak\" >nul;
+  copy !rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
+  copy !rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
   )
+
 if exist !rootpath!/mscn (
     if not exist Data (
     mkdir Data
@@ -75,6 +77,7 @@ if exist !rootpath!/mscn (
           ) else (echo 桑桑汉化版本!patch!低于已存在汉化文件)
         )
     )
+
 if exist Data (
       for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
       for /f %%i in ('dir /s /b !cd!\Data\Xml.m2h') do ( Set hhxml=%%~ti)
@@ -112,7 +115,6 @@ echo             q.退出并还原 & echo.&echo.&echo.&echo.&echo.&echo.
 echo   汉化使用方法
 echo.&echo.
 echo   按【0.汉化】健并回车后，开启游戏！
-echo   中途重启游戏，请先按【1.手动还原】再按【0.汉化】！
 echo   退出游戏后务必按【q.退出并还原】，否则会造成下次游戏登陆错误！
 echo.&echo.
 set "select="
@@ -136,19 +138,40 @@ if exist Data (
                       copy "!cd!\Data\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul
                       )
                       echo 汉化成功！
+                      goto hy0
                       )
   if !errorlevel! ==1 (
                       echo 请在网页中点击开始游戏...
-                      choice /t 5 /d y /n > nul
-                      goto hh0
+                      choice /c yn /t 5 /d y /n /m "*取消按N"
+                      if !errorlevel! ==2 goto main
+                      if !errorlevel! ==1 goto hh0
                       )
   ) else (
         echo.&echo.
         echo *********汉化文件Data不存在,请下载后再执行本脚本。*********
         )
 
-
 Goto main
+
+:hy0
+tasklist|find "MapleStory2.exe" >nul
+if !errorlevel! ==0 (
+                    cls
+                    echo 游戏正在进行中...
+                    echo 待游戏结束后自动还原
+                    choice /c yn /t 20 /d y /n /m "*取消或还原按N"
+                    if !errorlevel! ==2 goto hy1
+                    if !errorlevel! ==1 goto hy0
+                    )
+if !errorlevel! ==1 (
+                    copy "bak\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul;
+                    copy "bak\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul;
+                    copy "bak\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul;
+                    copy "bak\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul;
+                    echo.&echo.
+                    echo 游戏已还原为韩语。
+                    Goto hh0
+                    )
 
 :hy1
 cls
@@ -158,18 +181,21 @@ copy "bak\Resource\Gfx.m2d" "!rootpath!\Data\Resource\Gfx.m2d" >nul;
 copy "bak\Resource\Gfx.m2h" "!rootpath!\Data\Resource\Gfx.m2h" >nul;
 echo.&echo.
 echo 游戏已还原为韩语。
-
 Goto main
 
 :dnb
 cls
-echo 更新备份
+for /f %%i in ('dir /s /b !cd!\bak\Xml.m2h') do ( Set bkxml=%%~ti)
+for /f %%i in ('dir /s /b !cd!\bak\Xml.m2h') do ( Set bkxml=%%~ti)
+if "%xml%" equ "%bkxml%" (echo.&echo.&echo 游戏备份已经是最新) else (
+echo *检测到游戏已更新，进入备份...
 copy /y "!rootpath!\Data\Xml.m2h" "bak\" >nul;
 copy /y "!rootpath!\Data\Xml.m2d" "bak\" >nul;
 copy /y "!rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
 copy /y "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
 echo 更新备份已完成
-
+echo.&echo.
+)
 Goto main
 
 
