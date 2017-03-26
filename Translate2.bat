@@ -1,58 +1,32 @@
 @echo Off & setlocal enabledelayedexpansion
 :k@kdaye.com
-title 冒险岛2汉化工具 - J 20170325
-if exist config.bat (
-  echo 载入配置
-  call config.bat
-  ) else (
-    echo 初始化配置
-    echo 检测是否有Proxifier
-    if not defined Proxifier (
-      Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Proxifier.Document\DefaultIcon" >nul
-      if %errorlevel% == 1 (
-        echo Set Proxifier=1 >>config.bat
-         ) else (
-           echo Set Proxifier=0 >>config.bat
-           For /f "tokens=3,4,5 delims=, " %%i in (
-               'Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Proxifier.Document\DefaultIcon"'
-               ) do (
-               echo Set ProxifierPath=%%i %%j %%k>>config.bat
-                    )
-               )
-      )
-      echo 查找冒险岛2的路径
-      if not defined rootpath (
-            For /f "tokens=3 delims= " %%i in (
-              'Reg Query "HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Nexon\MapleStory2" /v "RootPath"  '
-              ) do (
-              echo Set rootpath=%%i>>config.bat
-              )
-            )
-    call config.bat
+title 枫叶
+MODE con: COLS=36 LINES=27
+color 2f
+if not defined rootpath (
+  set KEY_NAME="HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Nexon\MapleStory2"
+  set VALUE_NAME=RootPath
+  FOR /F "usebackq skip=2 tokens=1,2*" %%A IN (
+    `REG QUERY !KEY_NAME! /v !VALUE_NAME! 2^>nul`) DO (
+    set "ValueName=%%A"
+    set "ValueType=%%B"
+    set rootpath="%%C"
     )
-
-
-if %Proxifier%==0 (
-    if defined ProxifierPath (
-        tasklist|find "Proxifier.exe" >nul
-        if !errorlevel! ==0 (
-                              echo Proxifier已经运行
-                              )
-        if !errorlevel! ==1 (
-                              start "" "!ProxifierPath!"
-                              echo 启动Proxifier
-                              )
-        ) else (echo 缺少Proxifier路径)
+  IF DEFINED rootpath SET rootpath=!rootpath:"=!
+  if NOT defined rootpath (
+    echo 没有找到冒险岛2的路径.请先安装或注册表生成.
+    PAUSE>nul
     )
+  )
 
 if not exist bak (
   echo 创建备份：!cd!\bak
   mkdir bak >nul;
   mkdir bak\Resource >nul;
-  copy !rootpath!\Data\Xml.m2h" "bak\" >nul;
-  copy !rootpath!\Data\Xml.m2d" "bak\" >nul;
-  copy !rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
-  copy !rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
+  copy "!rootpath!\Data\Xml.m2h" "bak\" >nul;
+  copy "!rootpath!\Data\Xml.m2d" "bak\" >nul;
+  copy "!rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
+  copy "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
   )
 
 if exist !rootpath!/mscn (
