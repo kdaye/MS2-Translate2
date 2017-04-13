@@ -29,28 +29,36 @@ if not exist bak (
   copy "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
   )
 
-if exist !rootpath!/mscn (
-    if not exist Data (
-    mkdir Data
-    mkdir Data\Resource
-    )
-    Set mscnpath=!rootpath!/mscn
-    for /f "delims=" %%i in ('dir /b/ad/od !rootpath!\mscn') do ( Set patch=%%~i)
-    for %%i in ("!mscnpath!\!patch!\fff.m2h" "Data\Resource\Gfx.m2h")do set %%~ni=%%~ti
-    if !fff! equ !Gfx! (
-      echo 桑桑汉化和汉化Data-相同版本!patch!
+if exist "!rootpath!/mscn" (
+   Set mscnpath=!rootpath!\mscn
+      if not exist Data (
+      mkdir Data
+      mkdir Data\Resource
+      for /f "delims=" %%i in ('dir /b/ad/od !mscnpath!') do ( Set patch=%%~i)
+      Set patchdata=!mscnpath!\!patch!
+      copy "!patchdata!\111.m2d" "Data\Xml.m2d" >nul
+      copy "!patchdata!\sss.m2h" "Data\Xml.m2h" >nul
+      copy "!patchdata!\fff.m2d" "Data\Resource\Gfx.m2d" >nul
+      copy "!patchdata!\fff.m2h" "Data\Resource\Gfx.m2h" >nul
+      echo 复制汉化文件完成
       ) else (
-          if !fff! gtr !Gfx! (
-          echo 桑桑汉化文件较新-版本!patch!
+          for /f "delims=" %%i in ('dir /b/ad/od !mscnpath!') do ( Set patch=%%~i)
           Set patchdata=!mscnpath!\!patch!
-          copy "!patchdata!\111.m2d" "Data\Xml.m2d" >nul
-          copy "!patchdata!\sss.m2h" "Data\Xml.m2h" >nul
-          copy "!patchdata!\fff.m2d" "Data\Resource\Gfx.m2d" >nul
-          copy "!patchdata!\fff.m2h" "Data\Resource\Gfx.m2h" >nul
-          echo 复制汉化文件完成
-          ) else (echo 桑桑汉化版本!patch!低于已存在汉化文件)
-        )
-    )
+          for %%i in ("!patchdata!\fff.m2h" "Data\Resource\Gfx.m2h")do ( set %%~ni=%%~ti)
+          if !fff! equ !Gfx! (
+            echo 桑桑汉化和汉化Data-相同版本!patch!
+            ) else (
+                if !fff! gtr !Gfx! (
+                echo 桑桑汉化文件较新-版本!patch!
+                copy "!patchdata!\111.m2d" "Data\Xml.m2d" >nul
+                copy "!patchdata!\sss.m2h" "Data\Xml.m2h" >nul
+                copy "!patchdata!\fff.m2d" "Data\Resource\Gfx.m2d" >nul
+                copy "!patchdata!\fff.m2h" "Data\Resource\Gfx.m2h" >nul
+                echo 复制汉化文件完成
+                ) else (echo 桑桑汉化版本!patch!低于已存在汉化文件)
+              )
+          )
+      )
 
 if exist Data (
       for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
@@ -73,11 +81,12 @@ if exist Data (
                 echo 更新备份已完成
                         )
                       )
-        echo 自动开启官网
-        start http://maplestory2.nexon.com/
               ) else (
               echo.&echo.
-              echo *********汉化文件Data不存在,请下载后再执行本脚本。*********
+              echo ====================================
+              echo 汉化文件Data不存在,请下载后再执行本程序
+              echo ====================================
+              PAUSE>nul
               )
 
 :main
@@ -86,10 +95,10 @@ echo             0.汉化 & echo.
 echo             1.手动还原 & echo.
 echo             2.更新备份 & echo.
 echo             q.退出并还原 & echo.&echo.&echo.&echo.&echo.&echo.
+echo ====================================
 echo   汉化使用方法
-echo.&echo.
-echo   按【0.汉化】健并回车后，开启游戏！
-echo   退出游戏后务必按【q.退出并还原】，否则会造成下次游戏登陆错误！
+echo.
+echo 按键盘数字【0】健并回车后，开启游戏
 echo.&echo.
 set "select="
 set/p select= 输入数字，按回车继续 :
@@ -100,10 +109,20 @@ if "%select%"=="q" (goto exit)
 PAUSE >nul
 
 :hh0
-cls
+
 if exist Data (
   tasklist|find "MapleStory2.exe" >nul
   if !errorlevel! ==0 (
+                      for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
+                      for /f %%i in ('dir /s /b !cd!\bak\Xml.m2h') do ( Set bkxml=%%~ti)
+                      if "!xml!" equ "!bkxml!" (echo 游戏备份已经是最新) else (
+                      echo *检测到游戏已更新，进入备份...
+                      copy /y "!rootpath!\Data\Xml.m2h" "bak\" >nul;
+                      copy /y "!rootpath!\Data\Xml.m2d" "bak\" >nul;
+                      copy /y "!rootpath!\Data\Resource\Gfx.m2d" "bak\Resource\" >nul;
+                      copy /y "!rootpath!\Data\Resource\Gfx.m2h" "bak\Resource\" >nul;
+                      echo 更新备份已完成
+                              )
                       echo 正在汉化
                       copy "!cd!\Data\Xml.m2h" "!rootpath!\Data\Xml.m2h" >nul
                       copy "!cd!\Data\Xml.m2d" "!rootpath!\Data\Xml.m2d" >nul
@@ -115,14 +134,21 @@ if exist Data (
                       goto hy0
                       )
   if !errorlevel! ==1 (
+                      cls
+                      echo ====================================
                       echo 请在网页中点击开始游戏...
-                      choice /c yn /t 5 /d y /n /m "*取消按N"
+                      echo 本程序将自动完成汉化...
+                      echo ====================================
+                      choice /c yn /t 5 /d y /n /m "*取消或返回主菜单 请按N"
                       if !errorlevel! ==2 goto main
                       if !errorlevel! ==1 goto hh0
                       )
   ) else (
         echo.&echo.
-        echo *********汉化文件Data不存在,请下载后再执行本脚本。*********
+        echo ====================================
+        echo 汉化文件Data不存在,请下载后再执行本程序
+        echo ====================================
+        PAUSE>nul
         )
 
 Goto main
@@ -131,8 +157,15 @@ Goto main
 tasklist|find "MapleStory2.exe" >nul
 if !errorlevel! ==0 (
                     cls
-                    echo 游戏正在进行中...
-                    echo 待游戏结束后自动还原
+                    echo ====================================
+                    echo *如果游戏掉线或重开
+                    echo *请等待本窗口结束
+                    echo *或按N提前结束
+                    echo *才可再次启动游戏
+                    echo ====================================
+                    echo *游戏正在进行中...
+                    echo *待游戏结束后自动还原
+                    echo ====================================n
                     choice /c yn /t 20 /d y /n /m "*取消或还原按N"
                     if !errorlevel! ==2 goto hy1
                     if !errorlevel! ==1 goto hy0
@@ -160,7 +193,7 @@ Goto main
 :dnb
 cls
 for /f %%i in ('dir /s /b !cd!\bak\Xml.m2h') do ( Set bkxml=%%~ti)
-for /f %%i in ('dir /s /b !cd!\bak\Xml.m2h') do ( Set bkxml=%%~ti)
+for /f %%i in ('dir /s /b !rootpath!\Data\Xml.m2h') do ( Set xml=%%~ti)
 if "%xml%" equ "%bkxml%" (echo.&echo.&echo 游戏备份已经是最新) else (
 echo *检测到游戏已更新，进入备份...
 copy /y "!rootpath!\Data\Xml.m2h" "bak\" >nul;
